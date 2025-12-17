@@ -26,7 +26,7 @@ import {
 } from 'lucide-react';
 
 const Header = () => {
-  const { user, isAuthenticated, logout } = useAuth();
+  const { profile, isAuthenticated, isAdmin, logout } = useAuth();
   const { itemCount } = useCart();
   const navigate = useNavigate();
 
@@ -96,11 +96,11 @@ const Header = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
                 <div className="px-2 py-1.5">
-                  <p className="text-sm font-medium">{user?.firstName} {user?.lastName}</p>
-                  <p className="text-xs text-muted-foreground">{user?.email}</p>
+                  <p className="text-sm font-medium">{profile?.firstName} {profile?.lastName}</p>
+                  <p className="text-xs text-muted-foreground">{profile?.email}</p>
                 </div>
                 <DropdownMenuSeparator />
-                {user?.role === 'admin' ? (
+                {isAdmin ? (
                   <DropdownMenuItem onClick={() => navigate('/admin')}>
                     <LayoutDashboard className="mr-2 h-4 w-4" />
                     Admin Panel

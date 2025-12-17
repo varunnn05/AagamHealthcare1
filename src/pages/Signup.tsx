@@ -11,7 +11,7 @@ import { Eye, EyeOff, ArrowLeft } from 'lucide-react';
 
 const Signup = () => {
   const navigate = useNavigate();
-  const { signup, isLoading } = useAuth();
+  const { signup, isLoading, isAuthenticated } = useAuth();
 
   const [formData, setFormData] = useState({
     firstName: '',
@@ -23,6 +23,13 @@ const Signup = () => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [agreeTerms, setAgreeTerms] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Redirect if already authenticated
+  if (isAuthenticated) {
+    navigate('/');
+    return null;
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData(prev => ({
@@ -70,15 +77,17 @@ const Signup = () => {
       return;
     }
 
-    const success = await signup({
+    setIsSubmitting(true);
+    const result = await signup({
       email: formData.email,
       password: formData.password,
       firstName: formData.firstName,
       lastName: formData.lastName,
-      phone: formData.phone,
+      phone: formData.phone || undefined,
     });
+    setIsSubmitting(false);
 
-    if (success) {
+    if (result.success) {
       toast({
         title: 'Account created!',
         description: 'Welcome to Aagam Healthcare. You can now start ordering.',
@@ -87,7 +96,7 @@ const Signup = () => {
     } else {
       toast({
         title: 'Signup failed',
-        description: 'Something went wrong. Please try again.',
+        description: result.error || 'Something went wrong. Please try again.',
         variant: 'destructive',
       });
     }
@@ -225,8 +234,8 @@ const Signup = () => {
                 </label>
               </div>
 
-              <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? 'Creating account...' : 'Create Account'}
+              <Button type="submit" className="w-full" disabled={isSubmitting || isLoading}>
+                {isSubmitting ? 'Creating account...' : 'Create Account'}
               </Button>
             </form>
           </CardContent>
