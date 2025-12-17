@@ -15,7 +15,7 @@ import {
 } from 'lucide-react';
 
 const Dashboard = () => {
-  const { user } = useAuth();
+  const { profile } = useAuth();
   const navigate = useNavigate();
 
   const stats = [
@@ -48,7 +48,7 @@ const Dashboard = () => {
         {/* Welcome Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-foreground">
-            Welcome back, {user?.firstName}!
+            Welcome back, {profile?.firstName || 'User'}!
           </h1>
           <p className="text-muted-foreground mt-1">
             Manage your orders and account settings
@@ -170,16 +170,16 @@ const Dashboard = () => {
               <CardContent className="space-y-2">
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Name</span>
-                  <span>{user?.firstName} {user?.lastName}</span>
+                  <span>{profile?.firstName} {profile?.lastName}</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Email</span>
-                  <span>{user?.email}</span>
+                  <span>{profile?.email}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Status</span>
-                  <Badge variant={user?.isVerified ? 'default' : 'secondary'}>
-                    {user?.isVerified ? 'Verified' : 'Pending'}
+                  <span className="text-muted-foreground">Role</span>
+                  <Badge variant="default">
+                    {profile?.role === 'admin' ? 'Admin' : 'Customer'}
                   </Badge>
                 </div>
               </CardContent>
