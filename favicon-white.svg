@@ -1,0 +1,9 @@
+<svg width="32" height="32" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Aagam text -->
+  <text x="20" y="80" font-family="Arial, sans-serif" font-size="48" font-weight="bold" fill="white">Aagam</text>
+  <!-- Plus symbol near 'm' -->
+  <rect x="140" y="50" width="12" height="40" fill="white" rx="2"/>
+  <rect x="125" y="65" width="42" height="12" fill="white" rx="2"/>
+  <!-- Healthcare text -->
+  <text x="20" y="120" font-family="Arial, sans-serif" font-size="24" font-weight="normal" fill="white" letter-spacing="2">HEALTHCARE</text>
+</svg>
