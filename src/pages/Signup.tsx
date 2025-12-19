@@ -11,7 +11,7 @@ import { Eye, EyeOff, ArrowLeft } from 'lucide-react';
 
 const Signup = () => {
   const navigate = useNavigate();
-  const { signup, isLoading, isAuthenticated } = useAuth();
+  const { signup, isLoading } = useAuth();
 
   const [formData, setFormData] = useState({
     firstName: '',
@@ -23,13 +23,6 @@ const Signup = () => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [agreeTerms, setAgreeTerms] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  // Redirect if already authenticated
-  if (isAuthenticated) {
-    navigate('/');
-    return null;
-  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData(prev => ({
@@ -77,17 +70,15 @@ const Signup = () => {
       return;
     }
 
-    setIsSubmitting(true);
-    const result = await signup({
+    const success = await signup({
       email: formData.email,
       password: formData.password,
       firstName: formData.firstName,
       lastName: formData.lastName,
-      phone: formData.phone || undefined,
+      phone: formData.phone,
     });
-    setIsSubmitting(false);
 
-    if (result.success) {
+    if (success) {
       toast({
         title: 'Account created!',
         description: 'Welcome to Aagam Healthcare. You can now start ordering.',
@@ -96,7 +87,7 @@ const Signup = () => {
     } else {
       toast({
         title: 'Signup failed',
-        description: result.error || 'Something went wrong. Please try again.',
+        description: 'Something went wrong. Please try again.',
         variant: 'destructive',
       });
     }
@@ -168,7 +159,7 @@ const Signup = () => {
                   id="phone"
                   name="phone"
                   type="tel"
-                  placeholder="+91 98765 43210"
+                  placeholder="+91 78629 37216"
                   value={formData.phone}
                   onChange={handleChange}
                 />
@@ -234,8 +225,8 @@ const Signup = () => {
                 </label>
               </div>
 
-              <Button type="submit" className="w-full" disabled={isSubmitting || isLoading}>
-                {isSubmitting ? 'Creating account...' : 'Create Account'}
+              <Button type="submit" className="w-full" disabled={isLoading}>
+                {isLoading ? 'Creating account...' : 'Create Account'}
               </Button>
             </form>
           </CardContent>

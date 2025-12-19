@@ -26,7 +26,7 @@ import {
 } from 'lucide-react';
 
 const Header = () => {
-  const { profile, isAuthenticated, isAdmin, logout } = useAuth();
+  const { user, isAuthenticated, logout } = useAuth();
   const { itemCount } = useCart();
   const navigate = useNavigate();
 
@@ -46,14 +46,12 @@ const Header = () => {
     <header className="sticky top-0 z-50 w-full border-b border-border bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/60">
       <div className="container flex h-16 items-center justify-between">
         {/* Logo */}
-        <Link to="/" className="flex items-center space-x-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
-            <span className="text-lg font-bold text-primary-foreground">A</span>
-          </div>
-          <div className="hidden sm:block">
-            <span className="text-lg font-bold text-foreground">Aagam</span>
-            <span className="text-lg font-medium text-primary"> Healthcare</span>
-          </div>
+        <Link to="/" className="flex items-center pl-3">
+          <img
+            src={`${import.meta.env.BASE_URL}aagam.png`}
+            alt="Aagam Healthcare Logo"
+            className="h-14 w-auto object-contain"
+          />
         </Link>
 
         {/* Desktop Navigation */}
@@ -96,11 +94,11 @@ const Header = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
                 <div className="px-2 py-1.5">
-                  <p className="text-sm font-medium">{profile?.firstName} {profile?.lastName}</p>
-                  <p className="text-xs text-muted-foreground">{profile?.email}</p>
+                  <p className="text-sm font-medium">{user?.firstName} {user?.lastName}</p>
+                  <p className="text-xs text-muted-foreground">{user?.email}</p>
                 </div>
                 <DropdownMenuSeparator />
-                {isAdmin ? (
+                {user?.role === 'admin' ? (
                   <DropdownMenuItem onClick={() => navigate('/admin')}>
                     <LayoutDashboard className="mr-2 h-4 w-4" />
                     Admin Panel

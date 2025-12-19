@@ -27,7 +27,7 @@ import {
 } from '@/components/ui/sheet';
 
 const AdminDashboard = () => {
-  const { profile, logout } = useAuth();
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -97,12 +97,12 @@ const AdminDashboard = () => {
         <div className="flex items-center gap-3 px-3 py-2 mb-2">
           <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
             <span className="text-sm font-medium text-primary-foreground">
-              {profile?.firstName?.charAt(0) || 'A'}
+              {user?.firstName?.charAt(0)}
             </span>
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium truncate">{profile?.firstName || 'Admin'}</p>
-            <p className="text-xs text-muted-foreground truncate">{profile?.email}</p>
+            <p className="text-sm font-medium truncate">{user?.firstName}</p>
+            <p className="text-xs text-muted-foreground truncate">{user?.email}</p>
           </div>
         </div>
         <Button variant="ghost" className="w-full justify-start text-destructive" onClick={handleLogout}>

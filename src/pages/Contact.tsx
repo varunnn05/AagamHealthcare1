@@ -57,14 +57,14 @@ const Contact = () => {
     {
       icon: Phone,
       title: 'Phone',
-      value: '+91 98765 43210',
+      value: '+91 78629 37216',
       description: 'Mon-Sat 9AM to 6PM',
     },
     {
       icon: MapPin,
       title: 'Address',
-      value: '123 Healthcare Avenue',
-      description: 'Medical District, India',
+      value: 'Plot No. 18, Shree Sharda Row House, B/H. Sant Tukaram Society 6, Pal, Surat. 394510',
+      description: 'India',
     },
     {
       icon: Clock,
@@ -147,7 +147,7 @@ const Contact = () => {
                         id="phone"
                         name="phone"
                         type="tel"
-                        placeholder="+91 98765 43210"
+                        placeholder="+91 78629 37216"
                         value={formData.phone}
                         onChange={handleChange}
                       />

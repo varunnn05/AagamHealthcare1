@@ -26,7 +26,7 @@ const queryClient = new QueryClient();
 
 // Protected route wrapper
 const ProtectedRoute = ({ children, adminOnly = false }: { children: React.ReactNode; adminOnly?: boolean }) => {
-  const { isAuthenticated, isAdmin, isLoading } = useAuth();
+  const { isAuthenticated, user, isLoading } = useAuth();
 
   if (isLoading) {
     return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
@@ -36,7 +36,7 @@ const ProtectedRoute = ({ children, adminOnly = false }: { children: React.React
     return <Navigate to="/login" replace />;
   }
 
-  if (adminOnly && !isAdmin) {
+  if (adminOnly && user?.role !== 'admin') {
     return <Navigate to="/" replace />;
   }
 
@@ -129,7 +129,7 @@ const App = () => (
         <CartProvider>
           <Toaster />
           <Sonner />
-          <BrowserRouter>
+          <BrowserRouter basename="/AagamHealthcare1">
             <AppRoutes />
           </BrowserRouter>
         </CartProvider>

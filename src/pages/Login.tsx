@@ -4,29 +4,27 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from '@/hooks/use-toast';
-import { Eye, EyeOff, Mail, Lock, ArrowLeft } from 'lucide-react';
+import { Eye, EyeOff, Mail, Phone, Lock, ArrowLeft } from 'lucide-react';
 
 const Login = () => {
   const navigate = useNavigate();
-  const { login, isLoading, isAuthenticated } = useAuth();
+  const { login, isLoading, user } = useAuth();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  // Redirect if already authenticated
-  if (isAuthenticated) {
-    navigate('/');
-    return null;
-  }
+  const [loginMethod, setLoginMethod] = useState<'email' | 'phone'>('email');
+  const [phone, setPhone] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!email || !password) {
+    const identifier = loginMethod === 'email' ? email : phone;
+    
+    if (!identifier || !password) {
       toast({
         title: 'Error',
         description: 'Please fill in all fields',
@@ -35,20 +33,23 @@ const Login = () => {
       return;
     }
 
-    setIsSubmitting(true);
-    const result = await login(email, password);
-    setIsSubmitting(false);
+    const loggedInUser = await login(identifier, password);
     
-    if (result.success) {
+    if (loggedInUser) {
       toast({
         title: 'Welcome back!',
         description: 'You have successfully logged in',
       });
-      navigate('/');
+      // Redirect admins to admin dashboard, regular users to home
+      if (loggedInUser.role === 'admin') {
+        navigate('/admin');
+      } else {
+        navigate('/');
+      }
     } else {
       toast({
         title: 'Login failed',
-        description: result.error || 'Invalid credentials',
+        description: 'Invalid credentials. Try admin: aagamhc1@gmail.com / admin123 or any email with password: user123',
         variant: 'destructive',
       });
     }
@@ -78,54 +79,85 @@ const Login = () => {
           </CardHeader>
 
           <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="Enter your email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="pl-10"
-                  />
-                </div>
-              </div>
+            <Tabs value={loginMethod} onValueChange={(v) => setLoginMethod(v as 'email' | 'phone')}>
+              <TabsList className="grid w-full grid-cols-2 mb-6">
+                <TabsTrigger value="email">
+                  <Mail className="h-4 w-4 mr-2" />
+                  Email
+                </TabsTrigger>
+                <TabsTrigger value="phone">
+                  <Phone className="h-4 w-4 mr-2" />
+                  Phone
+                </TabsTrigger>
+              </TabsList>
 
-              <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    id="password"
-                    type={showPassword ? 'text' : 'password'}
-                    placeholder="Enter your password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="pl-10"
-                  />
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    className="absolute right-0 top-0 h-full px-3"
-                    onClick={() => setShowPassword(!showPassword)}
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <TabsContent value="email" className="mt-0 space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="email">Email</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder="Enter your email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                    />
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="phone" className="mt-0 space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="phone">Phone Number</Label>
+                    <Input
+                      id="phone"
+                      type="tel"
+                      placeholder="+91 78629 37216"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                    />
+                  </div>
+                </TabsContent>
+
+                <div className="space-y-2">
+                  <Label htmlFor="password">Password</Label>
+                  <div className="relative">
+                    <Input
+                      id="password"
+                      type={showPassword ? 'text' : 'password'}
+                      placeholder="Enter your password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      className="absolute right-0 top-0 h-full px-3"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? (
+                        <EyeOff className="h-4 w-4 text-muted-foreground" />
+                      ) : (
+                        <Eye className="h-4 w-4 text-muted-foreground" />
+                      )}
+                    </Button>
+                  </div>
+                </div>
+
+                <div className="flex justify-end">
+                  <Link
+                    to="/forgot-password"
+                    className="text-sm text-primary hover:underline"
                   >
-                    {showPassword ? (
-                      <EyeOff className="h-4 w-4 text-muted-foreground" />
-                    ) : (
-                      <Eye className="h-4 w-4 text-muted-foreground" />
-                    )}
-                  </Button>
+                    Forgot password?
+                  </Link>
                 </div>
-              </div>
 
-              <Button type="submit" className="w-full" disabled={isSubmitting || isLoading}>
-                {isSubmitting ? 'Logging in...' : 'Login'}
-              </Button>
-            </form>
+                <Button type="submit" className="w-full" disabled={isLoading}>
+                  {isLoading ? 'Logging in...' : 'Login'}
+                </Button>
+              </form>
+            </Tabs>
           </CardContent>
 
           <CardFooter className="flex flex-col space-y-4">
@@ -146,6 +178,10 @@ const Login = () => {
             </p>
           </CardFooter>
         </Card>
+
+        <p className="text-center text-xs text-muted-foreground mt-6">
+          Demo: Admin (aagamhc1@gmail.com / admin123) or any email with password user123
+        </p>
       </div>
     </div>
   );

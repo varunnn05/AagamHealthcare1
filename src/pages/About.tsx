@@ -199,8 +199,8 @@ const About = () => {
               </p>
               <div className="space-y-3">
                 <p><strong>Email:</strong> aagamhc1@gmail.com</p>
-                <p><strong>Phone:</strong> +91 98765 43210</p>
-                <p><strong>Address:</strong> 123 Healthcare Avenue, Medical District, India</p>
+                <p><strong>Phone:</strong> +91 78629 37216</p>
+                <p><strong>Address:</strong> Plot No. 18, Shree Sharda Row House, B/H. Sant Tukaram Society 6, Pal, Surat. 394510</p>
               </div>
             </div>
           </div>

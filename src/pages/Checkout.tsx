@@ -21,7 +21,7 @@ import { ArrowLeft, CreditCard, Building, Smartphone, Globe } from 'lucide-react
 
 const Checkout = () => {
   const navigate = useNavigate();
-  const { profile } = useAuth();
+  const { user } = useAuth();
   const { items, subtotal, gstTotal, total, clearCart } = useCart();
 
   const [shippingAddress, setShippingAddress] = useState({
@@ -88,11 +88,11 @@ const Checkout = () => {
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label>Name</Label>
-                      <Input value={`${profile?.firstName || ''} ${profile?.lastName || ''}`} disabled />
+                      <Input value={`${user?.firstName} ${user?.lastName}`} disabled />
                     </div>
                     <div className="space-y-2">
                       <Label>Email</Label>
-                      <Input value={profile?.email || ''} disabled />
+                      <Input value={user?.email} disabled />
                     </div>
                   </div>
                 </CardContent>

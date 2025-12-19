@@ -15,20 +15,18 @@ import {
 } from 'lucide-react';
 
 const Dashboard = () => {
-  const { profile } = useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
 
+  // For new users with no order history, show zero counts
   const stats = [
-    { icon: Package, label: 'Total Orders', value: '12', color: 'text-primary' },
-    { icon: Clock, label: 'Pending', value: '2', color: 'text-yellow-500' },
-    { icon: CheckCircle, label: 'Completed', value: '10', color: 'text-green-500' },
+    { icon: Package, label: 'Total Orders', value: '0', color: 'text-primary' },
+    { icon: Clock, label: 'Pending', value: '0', color: 'text-yellow-500' },
+    { icon: CheckCircle, label: 'Completed', value: '0', color: 'text-green-500' },
   ];
 
-  const recentOrders = [
-    { id: 'ORD-001', date: '2024-01-15', status: 'completed', total: 12500 },
-    { id: 'ORD-002', date: '2024-01-10', status: 'processing', total: 8750 },
-    { id: 'ORD-003', date: '2024-01-05', status: 'approved', total: 15200 },
-  ];
+  // Empty array for new users
+  const recentOrders: any[] = [];
 
   const getStatusBadge = (status: string) => {
     const variants: Record<string, { variant: 'default' | 'secondary' | 'destructive' | 'outline'; label: string }> = {
@@ -48,7 +46,7 @@ const Dashboard = () => {
         {/* Welcome Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-foreground">
-            Welcome back, {profile?.firstName || 'User'}!
+            Welcome back, {user?.firstName}!
           </h1>
           <p className="text-muted-foreground mt-1">
             Manage your orders and account settings
@@ -170,16 +168,16 @@ const Dashboard = () => {
               <CardContent className="space-y-2">
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Name</span>
-                  <span>{profile?.firstName} {profile?.lastName}</span>
+                  <span>{user?.firstName} {user?.lastName}</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Email</span>
-                  <span>{profile?.email}</span>
+                  <span>{user?.email}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Role</span>
-                  <Badge variant="default">
-                    {profile?.role === 'admin' ? 'Admin' : 'Customer'}
+                  <span className="text-muted-foreground">Status</span>
+                  <Badge variant={user?.isVerified ? 'default' : 'secondary'}>
+                    {user?.isVerified ? 'Verified' : 'Pending'}
                   </Badge>
                 </div>
               </CardContent>

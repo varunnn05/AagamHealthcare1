@@ -72,9 +72,11 @@ const AdminProducts = () => {
     <div className="flex flex-col h-full">
       <div className="p-6 border-b border-border">
         <Link to="/" className="flex items-center space-x-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
-            <span className="text-lg font-bold text-primary-foreground">A</span>
-          </div>
+          <img 
+            src={`${import.meta.env.BASE_URL}aagam.png`}
+            alt="Aagam Healthcare Logo" 
+            className="h-9 w-9 object-contain"
+          />
           <span className="font-bold text-foreground">Admin Panel</span>
         </Link>
       </div>
