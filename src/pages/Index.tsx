@@ -69,7 +69,7 @@ const Index = () => {
                 Trusted Wholesale Partner
               </Badge>
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight">
-                Quality Lab Supplies forr{' '}
+                Quality Lab Supplies for{' '}
                 <span className="text-primary">Healthcare Professionals</span>
               </h1>
               <p className="text-lg text-muted-foreground max-w-lg">
