@@ -5,6 +5,7 @@ interface AuthContextType {
   user: User | null;
   isLoading: boolean;
   isAuthenticated: boolean;
+  isAdmin: boolean;
   login: (email: string, password: string) => Promise<User | null>;
   signup: (data: SignupData) => Promise<boolean>;
   logout: () => void;
@@ -106,12 +107,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     localStorage.removeItem('aagam_user');
   };
 
+  const isAdmin = user?.role === 'admin';
+
   return (
     <AuthContext.Provider
       value={{
         user,
         isLoading,
         isAuthenticated: !!user,
+        isAdmin,
         login,
         signup,
         logout,
